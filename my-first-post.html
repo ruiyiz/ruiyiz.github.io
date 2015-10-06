@@ -1,0 +1,194 @@
+<!doctype html>
+<html class="no-js" lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+		<title>Placeholder</title>
+		<meta name="description" content="">
+		<meta name="author" content="Ruiyi Zhang">
+
+		<link rel="stylesheet" href="/theme/css/foundation.css" />
+		<link rel="stylesheet" href="/theme/css/pygment/monokai.css" />
+		<link rel="stylesheet" href="/theme/css/custom.css" />
+
+
+		<script src="/theme/js/modernizr.js"></script>
+
+		<!-- Feeds -->
+
+
+		<!-- mathjax config similar to math.stackexchange -->
+		<script type="text/x-mathjax-config">
+		MathJax.Hub.Config({
+			jax: ["input/TeX", "output/HTML-CSS"],
+			tex2jax: {
+				inlineMath: [ ['$', '$'] ],
+				displayMath: [ ['$$', '$$']],
+				processEscapes: true,
+				skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+			},
+			messageStyle: "none",
+			"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"] }
+		});
+		</script>
+		<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+	</head>
+	<body>
+		<div class="off-canvas-wrap">
+			<div class="inner-wrap">
+				<!-- mobile top bar to activate nav -->
+				<nav class="tab-bar show-for-small">
+					<section class="left-small">
+						<a class="left-off-canvas-toggle menu-icon" ><span></span></a>
+					</section>
+
+					<section class="middle tab-bar-section">
+						<h1 class="title">Placeholder</h1>
+					</section>
+				</nav>
+
+				<!-- mobile side bar nav -->
+				<aside class="left-off-canvas-menu">
+					<ul class="off-canvas-list">
+						<li><a href="">Home</a></li>
+						<li><label>Categories</label></li>
+							<li class="active"><a href="/category/personal.html">Personal</a></li>
+
+						<li><label>Links</label></li>
+							<li><a href="http://sixfigureinvesting.com">Six Figure Investing</a></li>
+							<li><a href="http://vixcentral.com">VIX Central</a></li>
+
+
+
+						<li><label>Social</label></li>
+							<li><a href="#">Another social link</a></li>
+							<li><a href="#">You can add links in your config file</a></li>
+					</ul>	
+				</aside>
+
+				<!-- top bar nav -->
+				<nav class="top-bar hide-for-small-only" data-topbar>
+					<ul class="title-area">
+						<li class="name">
+							<h1><a href="/">Placeholder</a></h1>
+						</li>
+					</ul>
+
+					<section class="top-bar-section">
+						<ul class="left">
+								<li class="active"><a href="/category/personal.html">Personal</a></li>
+						</ul>
+                        <ul class="right">                                                                                                                                           
+                                                                                                                                             
+                        </ul>  
+					</section>
+				</nav>
+
+				<!-- Main Page Content and Sidebar -->
+				<section class="main-section">
+					<div class="row">
+						<!-- Main Content -->
+						<div class="medium-9 small-12 columns" role="content">
+<article>
+	<h2>My first post</h2>
+	<p>This document presents my solutions to UVIMCO's job screening questions. It is
+intended as a supporting document for my job application to the Risk Investment 
+Associate position (Req ID: 1015) at UVIMCO.</p>
+<p>MATLAB implementations are provided to aid the presentation wherever 
+appropriate. In order to show the algorithms in their most organic form, MATLAB 
+built-in functions are intentionally avoided if at all possible.</p>
+<p>For space saving reasons, not all MATLAB code are listed herein. The complete
+source code, datasets, as well as the <em>R Markdown</em> file that typesets this
+document are all made available online
+(<a href="http://tinyurl.com/ruiyiz-pub/uvimco.zip">download link</a>).</p>
+<hr />
+<h1>Question 1</h1>
+<p>Manager A is a Long-only equity manager. We have their most recent 10yr monthly 
+returns history as well as their benchmark returns, e.g. the S&amp;P 500:</p>
+<p>a) What do you do to evaluate manager A's performance? What are some 
+measurements you would look at and what are the formula and procedure to 
+calculate them?
+b) How do we estimate A's risk given we only have A's return data?
+c) How would you estimate A's "active" risk?</p>
+<p><strong>ANSWER:</strong></p>
+<p><strong>a)</strong> To evaluate a manager's performance, I would compile measurements that 
+can be grouped into roughly three buckets -- cumulative performance, return 
+statistics, and risk-adjusted returns. These metrics are then evaluated on both
+an absolute basis and a comparative basis against a benchmark.</p>
+<p>The following introduces the metrics, discusses the interpretations, and 
+outlines the formulas and processes required to calculate them. Wherever 
+appropriate, MATLAB code are also presented with sample results. The sample data
+used in this answer are the monthly returns of Fidelity Magellan Fund (symbol:
+FMAGX), a long-only Large Growth fund. The benchmark is the monthly return
+series of S&amp;P 500 Total Return Index (symbol: SP500TR).</p>
+<div class="highlight"><pre><span class="n">load</span> <span class="n">AssetReturn</span>
+<span class="n">fts</span> <span class="p">=</span> <span class="n">extfield</span><span class="p">(</span><span class="n">MonthlyReturn</span><span class="p">,</span> <span class="p">{</span><span class="s">&#39;FMAGX&#39;</span><span class="p">,</span> <span class="s">&#39;SP500TR&#39;</span><span class="p">});</span>
+</pre></div>
+
+
+<p>In formulas that follow, let $R = \left{ r_t: t \in T \right}$ be the return
+time series, and $n$ be the number of observations.</p>
+<p><strong>c)</strong> Active Risk is the risk caused by holdings deviate from those of the 
+benchmark in an effort to outperform the benchmark. It can be measured as 
+<em>tracking error</em>, which is the variability of a manager's excess return over a
+benchmark. This excess return is often called <em>active premium</em>. The formula for
+calculating <em>tracking error</em> is:</p>
+<p>$$\mathrm{TE} = \sqrt{\frac{\displaystyle\sum_{i=1}^{n}(a_i - \bar{a})^2}{n}}$$</p>
+<p>Note the calculation is the same as the standard deviation, except active
+premium $a$ takes the place of the usual returns.</p>
+	<hr/>
+	<h6>Written by <a href="/author/ruiyi-zhang.html">Ruiyi Zhang</a> in <a href="/category/personal.html">Personal</a> on Fri 02 October 2015. Tags: <a href="/tag/r.html">R</a>, <a href="/tag/r-markdown.html">R Markdown</a>, </h6>
+</article>
+
+<hr/>
+						</div>
+						<!-- End Main Content -->
+						<!-- Sidebar -->
+						<aside class="medium-3 hide-for-small-only columns">
+							<div class="panel">
+								<h5>Links</h5>
+								<ul class="side-nav">
+									<li><a href="http://sixfigureinvesting.com">Six Figure Investing</a></li>
+									<li><a href="http://vixcentral.com">VIX Central</a></li>
+								</ul>
+							</div>
+
+							<div class="panel">
+								<h5>Tags</h5>
+								<ul class="tag-cloud">
+								</ul>
+							</div>
+
+
+							<div class="panel">
+								<h5>Social</h5>
+								<ul class="side-nav">
+									<li><a href="#">Another social link</a></li>
+									<li><a href="#">You can add links in your config file</a></li>
+								</ul>
+							</div>
+						</aside>
+						<!-- End Sidebar -->
+					</div>
+
+					<!-- Footer -->
+					<footer class="row">
+						<div class="medium-9 small-12">
+							<hr/>
+							<p class="text-center">Powered by <a href="http://getpelican.com">Pelican</a> and <a href="http://foundation.zurb.com/">Zurb Foundation</a>. Theme by <a href="http://hamaluik.com">Kenton Hamaluik</a>.</p>
+						</div>
+					</footer>
+					<!-- End Footer -->
+				</section>
+				<a class="exit-off-canvas"></a>
+			</div><!--off-canvas inner-->
+		</div><!--off-canvas wrap-->
+
+		<script src="/theme/js/jquery.js"></script>
+		<script src="/theme/js/foundation.min.js"></script>
+		<script>
+			$(document).foundation();
+		</script>
+	</body>
+</html>
